@@ -30,6 +30,14 @@ export class FileHandler {
   }
 
   static findInputFile(filename: string): FileSearchResult {
+    if (path.isAbsolute(filename) && fs.existsSync(filename)) {
+      return {
+        found: true,
+        filePath: filename,
+        searchedPaths: [],
+      };
+    }
+
     const searchPaths = this.SEARCH_PATHS;
 
     for (const searchPath of searchPaths) {
