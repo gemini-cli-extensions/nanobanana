@@ -19,7 +19,7 @@ const execAsync = promisify(exec);
 
 export class ImageGenerator {
   private ai: GoogleGenAI;
-  private static readonly MODEL_NAME = 'gemini-2.5-flash-image-preview';
+  private static readonly MODEL_NAME = 'gemini-2.5-flash-image';
 
   constructor(authConfig: AuthConfig) {
     this.ai = new GoogleGenAI({
