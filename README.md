@@ -407,7 +407,7 @@ The extension uses the official Model Context Protocol (MCP) SDK for robust clie
 
 ### API Integration
 
-- **Model**: `gemini-2.5-flash-image-preview`
+- **Model**: `gemini-2.5-flash-image`
 - **SDK**: `@google/genai`
 - **Response Handling**: Multiple fallback locations for image data detection
 
