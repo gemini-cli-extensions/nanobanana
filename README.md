@@ -37,7 +37,6 @@ For authentication setup, see the [official Gemini CLI documentation](https://gi
 Install the extension using the `gemini extensions install` command:
 
 ```bash
-# Install from the GitHub URL
 gemini extensions install https://github.com/gemini-cli-extensions/nanobanana
 ```
 
