@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/gemini-cli-extensions-nanobanana-badge.png)](https://mseep.ai/app/gemini-cli-extensions-nanobanana)
+
 # Nano Banana - Gemini CLI Extension
 
 A professional Gemini CLI extension for generating and manipulating images using the **Gemini 2.5 Flash Image** model (Nano Banana).
