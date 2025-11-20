@@ -1,8 +1,8 @@
 {
   "name": "nanobanana-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.10",
   "type": "module",
-  "description": "MCP server for Nano Banana (Gemini 2.5 Flash Image) extension",
+  "description": "MCP server for Nano Banana extension",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

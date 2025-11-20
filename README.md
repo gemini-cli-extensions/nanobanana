@@ -1,6 +1,11 @@
+> [!NOTE]  
+> Nano Banana Pro (`gemini-3-pro-image-preview`) is now supported in this extension (v1.0.10+)!
+>
+> Set the `NANOBANANA_MODEL` environment variable to `gemini-3-pro-image-preview` to use it.
+
 # Nano Banana - Gemini CLI Extension
 
-A professional Gemini CLI extension for generating and manipulating images using the **Gemini 2.5 Flash Image** model (Nano Banana).
+A professional Gemini CLI extension for generating and manipulating images using the Nano Banana models.
 
 ## ✨ Features
 
@@ -29,6 +34,21 @@ For authentication setup, see the [official Gemini CLI documentation](https://gi
 - **`imageGenerator.ts`**: Handles all Gemini API interactions and response processing
 - **`fileHandler.ts`**: Manages file I/O, smart filename generation, and file searching
 - **`types.ts`**: Shared TypeScript interfaces for type safety
+
+## 🍌 Model Selection
+
+There are two different Nano Banana models supported by this extension:
+
+- `gemini-2.5-flash-image` (default)
+- `gemini-3-pro-image-preview` (Nano Banana Pro)
+
+The `gemini-2.5-flash-image` model is the default model.
+
+To use the new Gemini 3 Pro powered model set the `NANOBANANA_MODEL` environment variable to `gemini-3-pro-image-preview`.
+
+```bash
+export NANOBANANA_MODEL=gemini-3-pro-image-preview
+```
 
 ## 🚀 Installation
 
