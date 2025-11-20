@@ -440,7 +440,7 @@ The extension uses the official Model Context Protocol (MCP) SDK for robust clie
 
 ### Common Issues
 
-1. **"Command not recognized"**: Ensure extension is in `~/.gemini/extensions/nanobanana-extension/` and Gemini CLI is restarted
+1. **"Command not recognized"**: Ensure extension is in `~/.gemini/extensions/nanobanana/` and Gemini CLI is restarted
 
 2. **"No API key found"**: Set `GEMINI_API_KEY` environment variable:
 
