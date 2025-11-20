@@ -1,8 +1,8 @@
 {
   "name": "nanobanana-extension",
-  "version": "1.0.0",
+  "version": "1.0.10",
   "type": "module",
-  "description": "Gemini CLI extension for Nano Banana (Gemini 2.5 Flash Image) model",
+  "description": "Gemini CLI extension for Nano Banana models",
   "scripts": {
     "build": "cd mcp-server && npm run build",
     "install-deps": "cd mcp-server && npm install",

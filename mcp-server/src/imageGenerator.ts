@@ -19,12 +19,16 @@ const execAsync = promisify(exec);
 
 export class ImageGenerator {
   private ai: GoogleGenAI;
-  private static readonly MODEL_NAME = 'gemini-2.5-flash-image';
+  private modelName: string;
+  private static readonly DEFAULT_MODEL = 'gemini-2.5-flash-image';
 
   constructor(authConfig: AuthConfig) {
     this.ai = new GoogleGenAI({
       apiKey: authConfig.apiKey,
     });
+    this.modelName =
+      process.env.NANOBANANA_MODEL || ImageGenerator.DEFAULT_MODEL;
+    console.error(`DEBUG - Using image model: ${this.modelName}`);
   }
 
   private async openImagePreview(filePath: string): Promise<void> {
@@ -254,7 +258,7 @@ export class ImageGenerator {
         try {
           // Make API call for each variation
           const response = await this.ai.models.generateContent({
-            model: ImageGenerator.MODEL_NAME,
+            model: this.modelName,
             contents: [
               {
                 role: 'user',
@@ -440,7 +444,7 @@ export class ImageGenerator {
   
           try {
             const response = await this.ai.models.generateContent({
-              model: ImageGenerator.MODEL_NAME,
+              model: this.modelName,
               contents: [
                 {
                   role: 'user',
@@ -563,7 +567,7 @@ export class ImageGenerator {
       );
 
       const response = await this.ai.models.generateContent({
-        model: ImageGenerator.MODEL_NAME,
+        model: this.modelName,
         contents: [
           {
             role: 'user',
