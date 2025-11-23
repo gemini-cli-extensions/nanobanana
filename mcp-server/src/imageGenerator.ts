@@ -23,9 +23,17 @@ export class ImageGenerator {
   private static readonly DEFAULT_MODEL = 'gemini-2.5-flash-image';
 
   constructor(authConfig: AuthConfig) {
-    this.ai = new GoogleGenAI({
-      apiKey: authConfig.apiKey,
-    });
+    if (process.env.NANOBANANA_GOOGLE_CLOUD_PROJECT) {
+      this.ai = new GoogleGenAI({
+        vertexai: true,
+        project: process.env.NANOBANANA_GOOGLE_CLOUD_PROJECT,
+        location: 'global',
+      });
+    } else {
+      this.ai = new GoogleGenAI({
+        apiKey: authConfig.apiKey,
+      });
+    }
     this.modelName =
       process.env.NANOBANANA_MODEL || ImageGenerator.DEFAULT_MODEL;
     console.error(`DEBUG - Using image model: ${this.modelName}`);
@@ -99,6 +107,13 @@ export class ImageGenerator {
   }
 
   static validateAuthentication(): AuthConfig {
+    if (process.env.NANOBANANA_GOOGLE_CLOUD_PROJECT) {
+      console.error(
+        '✓ Found NANOBANANA_GOOGLE_CLOUD_PROJECT, attempting to use Application Default Credentials (ADC)',
+      );
+      return { keyType: 'ADC' };
+    }
+
     const nanoGeminiKey = process.env.NANOBANANA_GEMINI_API_KEY;
     if (nanoGeminiKey) {
       console.error('✓ Found NANOBANANA_GEMINI_API_KEY environment variable');
@@ -128,7 +143,7 @@ export class ImageGenerator {
     }
 
     throw new Error(
-      'ERROR: No valid API key found. Please set NANOBANANA_GEMINI_API_KEY, NANOBANANA_GOOGLE_API_KEY, GEMINI_API_KEY, or GOOGLE_API_KEY environment variable.\n' +
+      'ERROR: No valid API key or ADC configuration found. Please set NANOBANANA_GEMINI_API_KEY or configure ADC by setting NANOBANANA_GOOGLE_CLOUD_PROJECT.\n' +
         'For more details on authentication, visit: https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/authentication.md',
     );
   }
