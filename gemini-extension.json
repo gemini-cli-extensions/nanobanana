@@ -1,6 +1,6 @@
 {
   "name": "nanobanana",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Gemini CLI extension for Nano Banana models - generate and manipulate images with text prompts",
   "mcpServers": {
     "nanobanana": {
