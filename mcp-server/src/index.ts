@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger } from './logger.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
@@ -539,7 +540,7 @@ class NanoBananaServer {
           throw new Error(response.error || response.message);
         }
       } catch (error: unknown) {
-        console.error(`Error executing tool ${name}:`, error);
+        Logger.log(`Error executing tool ${name}:`, error);
         if (error instanceof Error) {
           throw error;
         }
@@ -608,7 +609,7 @@ class NanoBananaServer {
 
   private setupErrorHandling() {
     this.server.onerror = (error) => {
-      console.error('[MCP Error]', error);
+      Logger.log('[MCP Error]', error);
     };
 
     process.on('SIGINT', async () => {
@@ -620,12 +621,12 @@ class NanoBananaServer {
   async run() {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('Nano Banana MCP server running on stdio');
+    Logger.log('Nano Banana MCP server running on stdio');
   }
 }
 
 const server = new NanoBananaServer();
 server.run().catch((error) => {
-  console.error('Failed to start server:', error);
+  Logger.log('Failed to start server:', error);
   process.exit(1);
 });

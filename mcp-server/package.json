@@ -1,6 +1,6 @@
 {
   "name": "nanobanana-mcp-server",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "type": "module",
   "description": "MCP server for Nano Banana extension",
   "main": "dist/index.js",

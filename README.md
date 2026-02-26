@@ -1,7 +1,7 @@
 > [!NOTE]  
-> Nano Banana Pro (`gemini-3-pro-image-preview`) is now supported in this extension (v1.0.10+)!
+> Nano Banana 2 (`gemini-3.1-flash-image-preview`) is now the default model (v1.0.11+)!
 >
-> Set the `NANOBANANA_MODEL` environment variable to `gemini-3-pro-image-preview` to use it.
+> You can still use the Pro model by setting the `NANOBANANA_MODEL` environment variable to `gemini-3-pro-image-preview`.
 
 # Nano Banana - Gemini CLI Extension
 
@@ -37,17 +37,20 @@ For authentication setup, see the [official Gemini CLI documentation](https://gi
 
 ## 🍌 Model Selection
 
-There are two different Nano Banana models supported by this extension:
+The following Nano Banana models are supported:
 
-- `gemini-2.5-flash-image` (default)
+- `gemini-3.1-flash-image-preview` (Nano Banana 2 - **default**)
 - `gemini-3-pro-image-preview` (Nano Banana Pro)
+- `gemini-2.5-flash-image` (Nano Banana v1)
 
-The `gemini-2.5-flash-image` model is the default model.
-
-To use the new Gemini 3 Pro powered model set the `NANOBANANA_MODEL` environment variable to `gemini-3-pro-image-preview`.
+The `gemini-3.1-flash-image-preview` model is the default. To use a different model, set the `NANOBANANA_MODEL` environment variable:
 
 ```bash
+# Example: Use Nano Banana Pro
 export NANOBANANA_MODEL=gemini-3-pro-image-preview
+
+# Example: Use Nano Banana v1
+export NANOBANANA_MODEL=gemini-2.5-flash-image
 ```
 
 ## 🚀 Installation
@@ -426,7 +429,7 @@ The extension uses the official Model Context Protocol (MCP) SDK for robust clie
 
 ### API Integration
 
-- **Model**: `gemini-2.5-flash-image`
+- **Model**: `gemini-3.1-flash-image-preview`
 - **SDK**: `@google/genai`
 - **Response Handling**: Multiple fallback locations for image data detection
 

@@ -1,6 +1,6 @@
 # Nano Banana - Gemini Image Generation Instructions
 
-This file contains specific instructions for the Gemini 2.5 Flash Image model when working with the Nano Banana extension for image generation, editing, and restoration.
+This file contains specific instructions for the Nano Banana 2 (gemini-3.1-flash-image-preview) model when working with the Nano Banana extension for image generation, editing, and restoration.
 
 ## Core Generation Principles
 
