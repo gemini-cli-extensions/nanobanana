@@ -18,13 +18,16 @@ A professional Gemini CLI extension for generating and manipulating images using
 
 1. **Gemini CLI** installed and configured
 2. **Node.js 20+** and npm
-3. **API Key**: Set one of these environment variables:
-   - `NANOBANANA_GEMINI_API_KEY` (recommended for Gemini API key users who
-     normally authenticate to Gemini CLI using the "Login with Google" option)
-   - `NANOBANANA_GOOGLE_API_KEY` (recommended for Vertex API key users who
-     normally authenticate to Gemini CLI using the "Login with Google" option)
-   - `GEMINI_API_KEY` (fallback)
-   - `GOOGLE_API_KEY` (fallback)
+3. **Authentication**: Configure either an API Key or Application Default Credentials (ADC).
+   - **API Key**: Set one of these environment variables:
+      - `NANOBANANA_GEMINI_API_KEY` (recommended for Gemini API key users who
+      normally authenticate to Gemini CLI using the "Login with Google" option)
+      - `NANOBANANA_GOOGLE_API_KEY` (recommended for Vertex API key users who
+      normally authenticate to Gemini CLI using the "Login with Google" option)
+      - `GEMINI_API_KEY` (fallback)
+      - `GOOGLE_API_KEY` (fallback)
+   - **Application Default Credentials (ADC)**: Set this environment variable:
+      - `NANOBANANA_GOOGLE_CLOUD_PROJECT`: Your Google Cloud project ID. The extension will use ADC for authentication with Vertex AI.
 
 For authentication setup, see the [official Gemini CLI documentation](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/authentication.md).
 
