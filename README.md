@@ -26,7 +26,7 @@ A professional Gemini CLI extension for generating and manipulating images using
    - `GEMINI_API_KEY` (fallback)
    - `GOOGLE_API_KEY` (fallback)
 
-For authentication setup, see the [official Gemini CLI documentation](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/authentication.md).
+For authentication setup, see the [official Gemini CLI documentation](https://github.com/google-gemini/gemini-cli/blob/main/docs/get-started/authentication.md).
 
 ### Key Components
 
