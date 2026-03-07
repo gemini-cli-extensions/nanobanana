@@ -136,7 +136,7 @@ export class ImageGenerator {
     throw new Error(
       'ERROR: No valid API key found. Please set NANOBANANA_API_KEY environment variable.\n' +
         'Fallback variables: NANOBANANA_GEMINI_API_KEY, NANOBANANA_GOOGLE_API_KEY, GEMINI_API_KEY, GOOGLE_API_KEY.\n' +
-        'For more details on authentication, visit: https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/authentication.md',
+        'For more details on authentication, visit: https://geminicli.com/docs/get-started/authentication/',
     );
   }
 
