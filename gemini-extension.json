@@ -12,15 +12,9 @@
   "contextFileName": "GEMINI.md",
   "settings": [
     {
-      "name": "Gemini API Key",
-      "description": "Set this value if you normally authenticate with a Gemini API key. Get your key from https://aistudio.google.com/apikey.",
-      "envVar": "NANOBANANA_GEMINI_API_KEY",
-      "sensitive": true
-    },
-    {
-      "name": "Google API Key",
-      "description": "Get your key from Google Cloud Console. Recommended for Vertex API key users who normally authenticate to Gemini CLI using the \"Login with Google\" option",
-      "envVar": "NANOBANANA_GOOGLE_API_KEY",
+      "name": "API Key",
+      "description": "Your Gemini API key. Get one from https://aistudio.google.com/apikey.",
+      "envVar": "NANOBANANA_API_KEY",
       "sensitive": true
     }
   ]
