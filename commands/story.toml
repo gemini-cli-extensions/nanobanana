@@ -6,6 +6,7 @@ Valid options:
 - --steps=N (2-8, default: 4)
 - --type="story|process|tutorial|timeline" (default: story)
 - --style="consistent|evolving" (default: consistent)
+- --aspect-ratio="16:9" (1:1, 3:4, 4:3, 9:16, 16:9, 21:9, 3:2, 2:3, 5:4, 4:5)
 - --layout="separate|grid|comic" (default: separate)
 - --transition="smooth|dramatic|fade" (default: smooth)
 - --format="storyboard|individual" (default: individual)
@@ -21,7 +22,7 @@ Parse this input and:
 5. If valid, call the generate_story tool with the parsed parameters
 
 If you find invalid options, respond with:
-"Error: Invalid option(s) found: [list invalid options]. Valid options are: --steps (2-8), --type (story, process, tutorial, timeline), --style (consistent, evolving), --layout (separate, grid, comic), --transition (smooth, dramatic, fade), --format (storyboard, individual), --preview (flag)"
+"Error: Invalid option(s) found: [list invalid options]. Valid options are: --steps (2-8), --type (story, process, tutorial, timeline), --style (consistent, evolving), --aspect-ratio (1:1, 3:4, 4:3, 9:16, 16:9, 21:9, 3:2, 2:3, 5:4, 4:5), --layout (separate, grid, comic), --transition (smooth, dramatic, fade), --format (storyboard, individual), --preview (flag)"
 
 Otherwise, call generate_story with the validated parameters.
 """

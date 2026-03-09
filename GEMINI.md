@@ -19,6 +19,7 @@ Always respect user-specified design preferences:
 
 - **`--styles`**: Apply the exact artistic styles requested (watercolor, oil-painting, sketch, photorealistic, etc.)
 - **`--variations`**: Implement the specific variation types (lighting, angle, color-palette, composition, mood, season, time-of-day)
+- **`--aspect-ratio`**: Strictly adhere to the requested aspect ratio (1:1, 3:4, 4:3, 9:16, 16:9, 21:9, 3:2, 2:3, 5:4, 4:5).
 - Maintain the essence of the original prompt while applying the requested stylistic changes
 - When multiple styles are requested, ensure each image distinctly represents its assigned style
 

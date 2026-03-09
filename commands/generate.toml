@@ -6,6 +6,7 @@ Valid options:
 - --count=N (1-8, default: 1)
 - --styles="style1,style2" (photorealistic, watercolor, oil-painting, sketch, pixel-art, anime, vintage, modern, abstract, minimalist)
 - --variations="var1,var2" (lighting, angle, color-palette, composition, mood, season, time-of-day)
+- --aspect-ratio="16:9" (1:1, 3:4, 4:3, 9:16, 16:9, 21:9, 3:2, 2:3, 5:4, 4:5)
 - --format=grid|separate (default: separate)
 - --seed=123 (integer)
 - --preview (flag)
@@ -19,7 +20,7 @@ Parse this input and:
 4. If valid, call the generate_image tool with the parsed parameters
 
 If you find invalid options, respond with:
-"Error: Invalid option(s) found: [list invalid options]. Valid options are: --count (1-8), --styles (comma-separated list from: photorealistic, watercolor, oil-painting, sketch, pixel-art, anime, vintage, modern, abstract, minimalist), --variations (comma-separated list from: lighting, angle, color-palette, composition, mood, season, time-of-day), --format (grid or separate), --seed (integer), --preview (flag)"
+"Error: Invalid option(s) found: [list invalid options]. Valid options are: --count (1-8), --styles (comma-separated list from: photorealistic, watercolor, oil-painting, sketch, pixel-art, anime, vintage, modern, abstract, minimalist), --variations (comma-separated list from: lighting, angle, color-palette, composition, mood, season, time-of-day), --aspect-ratio (1:1, 3:4, 4:3, 9:16, 16:9, 21:9, 3:2, 2:3, 5:4, 4:5), --format (grid or separate), --seed (integer), --preview (flag)"
 
 Otherwise, call generate_image with the validated parameters.
 """

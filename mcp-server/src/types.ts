@@ -12,6 +12,7 @@ export interface ImageGenerationRequest {
   // Batch generation options
   styles?: string[];
   variations?: string[];
+  aspectRatio?: string;
   format?: 'grid' | 'separate';
   fileFormat?: 'png' | 'jpeg';
   seed?: number;

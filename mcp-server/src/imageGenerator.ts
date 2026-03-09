@@ -244,10 +244,37 @@ export class ImageGenerator {
     return prompts.length > 0 ? prompts : [basePrompt];
   }
 
+  private validateAspectRatio(ratio: string): void {
+    const validRatios = [
+      '1:1',
+      '3:4',
+      '4:3',
+      '9:16',
+      '16:9',
+      '21:9',
+      '3:2',
+      '2:3',
+      '5:4',
+      '4:5',
+    ];
+
+    if (!validRatios.includes(ratio)) {
+      throw new Error(
+        `Aspect ratio '${ratio}' is not supported. Supported ratios are: ${validRatios.join(
+          ', ',
+        )}`,
+      );
+    }
+  }
+
   async generateTextToImage(
     request: ImageGenerationRequest,
   ): Promise<ImageGenerationResponse> {
     try {
+      if (request.aspectRatio) {
+        this.validateAspectRatio(request.aspectRatio);
+      }
+
       const outputPath = FileHandler.ensureOutputDirectory();
       const generatedFiles: string[] = [];
       const prompts = this.buildBatchPrompts(request);
@@ -272,6 +299,11 @@ export class ImageGenerator {
                 parts: [{ text: currentPrompt }],
               },
             ],
+            config: {
+              imageConfig: request.aspectRatio
+                ? { aspectRatio: request.aspectRatio }
+                : undefined,
+            } as any,
           });
 
           console.error('DEBUG - API Response structure for variation', i + 1);
@@ -411,6 +443,10 @@ export class ImageGenerator {
       args?: StorySequenceArgs,
     ): Promise<ImageGenerationResponse> {
       try {
+        if (request.aspectRatio) {
+          this.validateAspectRatio(request.aspectRatio);
+        }
+
         const outputPath = FileHandler.ensureOutputDirectory();
         const generatedFiles: string[] = [];
         const steps = request.outputCount || 4;
@@ -458,6 +494,11 @@ export class ImageGenerator {
                   parts: [{ text: stepPrompt }],
                 },
               ],
+              config: {
+                imageConfig: request.aspectRatio
+                  ? { aspectRatio: request.aspectRatio }
+                  : undefined,
+              } as any,
             });
   
             if (response.candidates && response.candidates[0]?.content?.parts) {

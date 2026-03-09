@@ -86,6 +86,11 @@ class NanoBananaServer {
                   description:
                     'Array of variation types: lighting, angle, color-palette, composition, mood, season, time-of-day',
                 },
+                aspectRatio: {
+                  type: 'string',
+                  description:
+                    'Aspect ratio of the generated image (e.g., "1:1", "3:4", "4:3", "9:16", "16:9")',
+                },
                 format: {
                   type: 'string',
                   enum: ['grid', 'separate'],
@@ -320,6 +325,11 @@ class NanoBananaServer {
                   description: 'Output format',
                   default: 'individual',
                 },
+                aspectRatio: {
+                  type: 'string',
+                  description:
+                    'Aspect ratio of the generated image (e.g., "1:1", "3:4", "4:3", "9:16", "16:9")',
+                },
                 preview: {
                   type: 'boolean',
                   description:
@@ -418,6 +428,7 @@ class NanoBananaServer {
               mode: 'generate',
               styles: args?.styles as string[],
               variations: args?.variations as string[],
+              aspectRatio: args?.aspectRatio as string,
               format: (args?.format as 'grid' | 'separate') || 'separate',
               seed: args?.seed as number,
               preview: args?.preview as boolean,
@@ -495,6 +506,7 @@ class NanoBananaServer {
               outputCount: (args?.steps as number) || 4,
               mode: 'generate',
               variations: ['sequence-step'],
+              aspectRatio: args?.aspectRatio as string,
               preview: args?.preview as boolean,
               noPreview:
                 (args?.noPreview as boolean) ||
