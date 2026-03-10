@@ -12,6 +12,36 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
+import { config } from 'dotenv';
+import path from 'node:path';
+import fs from 'node:fs';
+import os from 'node:os';
+
+// Helper to find parent directories for .env just in case Gemini CLI changes CWD
+const cwd = process.cwd();
+const homeDir = os.homedir();
+const geminiHome = process.env.GEMINI_CLI_HOME || path.join(homeDir, '.gemini');
+
+// Also try to find a custom env variable from Gemini if they pass the real CWD
+const realProjectDir = process.env.GEMINI_PROJECT_DIR || process.env.PWD || cwd;
+
+const envPaths = [
+  path.join(realProjectDir, '.env'),
+  path.join(cwd, '.env'),
+  path.join(cwd, '.gemini', '.env'),
+  path.join(geminiHome, '.env'),
+  path.join(homeDir, '.env')
+];
+
+for (const envPath of envPaths) {
+  if (fs.existsSync(envPath)) {
+    const dotenvResult = config({ path: envPath });
+    if (!dotenvResult.error) {
+      break;
+    }
+  }
+}
+
 import { ImageGenerator } from './imageGenerator.js';
 import {
   ImageGenerationRequest,

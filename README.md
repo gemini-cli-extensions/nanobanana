@@ -23,6 +23,28 @@ A professional Gemini CLI extension for generating and manipulating images using
 
 For authentication setup, see the [official Gemini CLI documentation](https://geminicli.com/docs/get-started/authentication/).
 
+### Environment Variables (.env Support)
+
+For better security and convenience, Nano Banana supports loading your API keys and configurations directly from a `.env` file, bypassing the Gemini CLI's environment variable redaction policies.
+
+You can place a `.env` file in any of the following locations (the extension will automatically search for it in this exact order):
+
+1. **Your Current Project Directory** (e.g., `./.env` in the folder where you are running the `gemini` command)
+2. **A local `.gemini` folder** (e.g., `./.gemini/.env`)
+3. **Your Global Gemini configuration folder** (e.g., `~/.gemini/.env` or `%USERPROFILE%\.gemini\.env`)
+4. **Your User Home Directory** (e.g., `~/.env` or `%USERPROFILE%\.env`)
+
+**💡 Recommended Setup:**
+
+Create a `.env` file in your global Gemini directory (`~/.gemini/.env` on macOS/Linux or `C:\Users\YourUser\.gemini\.env` on Windows).
+
+```env
+NANOBANANA_GEMINI_API_KEY=AIzaSyYourSecretKeyHere...
+# You can also set a specific model for the extension
+NANOBANANA_MODEL=gemini-3.1-flash-image-preview
+```
+
+This ensures your keys are kept secure and loaded globally for Nano Banana without requiring you to manually `export` them in every terminal session.
 ### Key Components
 
 - **`index.ts`**: MCP server using `@modelcontextprotocol/sdk` for professional protocol handling
@@ -453,10 +475,6 @@ The extension uses the official Model Context Protocol (MCP) SDK for robust clie
    ```
 
 4. **"Image not found"**: Check that input files are in one of the searched directories (see File Search Locations above)
-
-### Debug Mode
-
-The MCP server includes detailed debug logging that appears in the Gemini CLI console to help diagnose issues.
 
 ## 📄 Legal
 

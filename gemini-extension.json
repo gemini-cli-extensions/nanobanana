@@ -5,8 +5,7 @@
   "mcpServers": {
     "nanobanana": {
       "command": "node",
-      "args": ["${extensionPath}/mcp-server/dist/index.js"],
-      "env": {}
+      "args": ["${extensionPath}/mcp-server/dist/index.js"]
     }
   },
   "contextFileName": "GEMINI.md",

@@ -1,3 +1,10 @@
 dist/
 node_modules/
 nanobanana-output/
+tmp/
+
+# Env files
+.env
+.env.*
+!.env.example
+.aiignore

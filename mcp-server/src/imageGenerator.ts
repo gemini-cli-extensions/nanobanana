@@ -28,7 +28,6 @@ export class ImageGenerator {
     });
     this.modelName =
       process.env.NANOBANANA_MODEL || ImageGenerator.DEFAULT_MODEL;
-    console.error(`DEBUG - Using image model: ${this.modelName}`);
   }
 
   private async openImagePreview(filePath: string): Promise<void> {
@@ -49,12 +48,7 @@ export class ImageGenerator {
       }
 
       await execAsync(command);
-      console.error(`DEBUG - Opened preview for: ${filePath}`);
     } catch (error: unknown) {
-      console.error(
-        `DEBUG - Failed to open preview for ${filePath}:`,
-        error instanceof Error ? error.message : String(error),
-      );
       // Don't throw - preview failure shouldn't break image generation
     }
   }
@@ -82,16 +76,9 @@ export class ImageGenerator {
 
     if (!shouldPreview || !files.length) {
       if (files.length > 1 && request.noPreview) {
-        console.error(
-          `DEBUG - Auto-preview disabled for ${files.length} images (--no-preview specified)`,
-        );
       }
       return;
     }
-
-    console.error(
-      `DEBUG - ${request.preview ? 'Explicit' : 'Auto'}-opening ${files.length} image(s) for preview`,
-    );
 
     // Open all generated images
     const previewPromises = files.map((file) => this.openImagePreview(file));
@@ -108,13 +95,13 @@ export class ImageGenerator {
     const nanoGeminiKey = process.env.NANOBANANA_GEMINI_API_KEY;
     if (nanoGeminiKey) {
       console.error('✓ Found NANOBANANA_GEMINI_API_KEY environment variable (fallback)');
-      return { apiKey: nanoGeminiKey };
+      return { apiKey: nanoGeminiKey, keyType: 'GEMINI_API_KEY' };
     }
 
     const nanoGoogleKey = process.env.NANOBANANA_GOOGLE_API_KEY;
     if (nanoGoogleKey) {
       console.error('✓ Found NANOBANANA_GOOGLE_API_KEY environment variable (fallback)');
-      return { apiKey: nanoGoogleKey };
+      return { apiKey: nanoGoogleKey, keyType: 'GOOGLE_API_KEY' };
     }
 
     const geminiKey = process.env.GEMINI_API_KEY;
@@ -122,7 +109,7 @@ export class ImageGenerator {
       console.error(
         '✓ Found GEMINI_API_KEY environment variable (fallback)',
       );
-      return { apiKey: geminiKey };
+      return { apiKey: geminiKey, keyType: 'GEMINI_API_KEY' };
     }
 
     const googleKey = process.env.GOOGLE_API_KEY;
@@ -130,7 +117,7 @@ export class ImageGenerator {
       console.error(
         '✓ Found GOOGLE_API_KEY environment variable (fallback)',
       );
-      return { apiKey: googleKey };
+      return { apiKey: googleKey, keyType: 'GOOGLE_API_KEY' };
     }
 
     throw new Error(
@@ -154,11 +141,6 @@ export class ImageGenerator {
 
     // Additional check: base64 image data is typically quite long
     if (data.length < 1000) {
-      console.error(
-        'DEBUG - Skipping short data that may not be image:',
-        data.length,
-        'characters',
-      );
       return false;
     }
 
@@ -252,16 +234,8 @@ export class ImageGenerator {
       const generatedFiles: string[] = [];
       const prompts = this.buildBatchPrompts(request);
       let firstError: string | null = null;
-
-      console.error(`DEBUG - Generating ${prompts.length} image variation(s)`);
-
       for (let i = 0; i < prompts.length; i++) {
         const currentPrompt = prompts[i];
-        console.error(
-          `DEBUG - Generating variation ${i + 1}/${prompts.length}:`,
-          currentPrompt,
-        );
-
         try {
           // Make API call for each variation
           const response = await this.ai.models.generateContent({
@@ -274,8 +248,6 @@ export class ImageGenerator {
             ],
           });
 
-          console.error('DEBUG - API Response structure for variation', i + 1);
-
           if (response.candidates && response.candidates[0]?.content?.parts) {
             // Process image parts in the response
             for (const part of response.candidates[0].content.parts) {
@@ -283,15 +255,8 @@ export class ImageGenerator {
 
               if (part.inlineData?.data) {
                 imageBase64 = part.inlineData.data;
-                console.error('DEBUG - Found image data in inlineData:', {
-                  length: imageBase64.length,
-                  mimeType: part.inlineData.mimeType,
-                });
               } else if (part.text && this.isValidBase64ImageData(part.text)) {
                 imageBase64 = part.text;
-                console.error(
-                  'DEBUG - Found image data in text field (fallback)',
-                );
               }
 
               if (imageBase64) {
@@ -308,7 +273,6 @@ export class ImageGenerator {
                   filename,
                 );
                 generatedFiles.push(fullPath);
-                console.error('DEBUG - Image saved to:', fullPath);
                 break; // Only process first valid image per variation
               }
             }
@@ -318,10 +282,6 @@ export class ImageGenerator {
           if (!firstError) {
             firstError = errorMessage;
           }
-          console.error(
-            `DEBUG - Error generating variation ${i + 1}:`,
-            errorMessage,
-          );
 
           // If auth-related, stop immediately
           if (errorMessage.toLowerCase().includes('authentication failed')) {
@@ -351,7 +311,6 @@ export class ImageGenerator {
         generatedFiles,
       };
     } catch (error: unknown) {
-      console.error('DEBUG - Error in generateTextToImage:', error);
       return {
         success: false,
         message: 'Failed to generate image',
@@ -419,8 +378,6 @@ export class ImageGenerator {
         const transition = args?.transition || 'smooth';
         let firstError: string | null = null;
   
-        console.error(`DEBUG - Generating ${steps}-step ${type} sequence`);
-  
         // Generate each step of the story/process
         for (let i = 0; i < steps; i++) {
           const stepNumber = i + 1;
@@ -446,8 +403,6 @@ export class ImageGenerator {
           if (i > 0) {
             stepPrompt += `, ${transition} transition from previous step`;
           }
-  
-          console.error(`DEBUG - Generating step ${stepNumber}: ${stepPrompt}`);
   
           try {
             const response = await this.ai.models.generateContent({
@@ -482,7 +437,6 @@ export class ImageGenerator {
                     filename,
                   );
                   generatedFiles.push(fullPath);
-                  console.error(`DEBUG - Step ${stepNumber} saved to:`, fullPath);
                   break;
                 }
               }
@@ -492,10 +446,6 @@ export class ImageGenerator {
             if (!firstError) {
               firstError = errorMessage;
             }
-            console.error(
-              `DEBUG - Error generating step ${stepNumber}:`,
-              errorMessage,
-            );
             if (errorMessage.toLowerCase().includes('authentication failed')) {
               return {
                 success: false,
@@ -507,15 +457,8 @@ export class ImageGenerator {
   
           // Check if this step was actually generated
           if (generatedFiles.length < stepNumber) {
-            console.error(
-              `DEBUG - WARNING: Step ${stepNumber} failed to generate - no valid image data received`,
-            );
           }
         }
-  
-        console.error(
-          `DEBUG - Story generation completed. Generated ${generatedFiles.length} out of ${steps} requested images`,
-        );
   
         if (generatedFiles.length === 0) {
           return {
@@ -539,7 +482,6 @@ export class ImageGenerator {
           generatedFiles,
         };
       } catch (error: unknown) {
-        console.error('DEBUG - Error in generateStorySequence:', error);
         return {
           success: false,
           message: `Failed to generate ${request.mode} sequence`,
@@ -590,12 +532,6 @@ export class ImageGenerator {
           },
         ],
       });
-
-      console.error(
-        'DEBUG - Edit API Response structure:',
-        JSON.stringify(response, null, 2),
-      );
-
       if (response.candidates && response.candidates[0]?.content?.parts) {
         const generatedFiles: string[] = [];
         let imageFound = false;
@@ -605,15 +541,8 @@ export class ImageGenerator {
 
           if (part.inlineData?.data) {
             resultImageBase64 = part.inlineData.data;
-            console.error('DEBUG - Found edited image in inlineData:', {
-              length: resultImageBase64.length,
-              mimeType: part.inlineData.mimeType,
-            });
           } else if (part.text && this.isValidBase64ImageData(part.text)) {
             resultImageBase64 = part.text;
-            console.error(
-              'DEBUG - Found edited image in text field (fallback)',
-            );
           }
 
           if (resultImageBase64) {
@@ -628,16 +557,12 @@ export class ImageGenerator {
               filename,
             );
 generatedFiles.push(fullPath);
-            console.error('DEBUG - Edited image saved to:', fullPath);
             imageFound = true;
             break; // Only process the first valid image
           }
         }
 
         if (!imageFound) {
-          console.error(
-            'DEBUG - No valid image data found in edit response parts',
-          );
         }
 
         // Handle preview if requested
@@ -656,7 +581,6 @@ generatedFiles.push(fullPath);
         error: 'No image data in response',
       };
     } catch (error: unknown) {
-      console.error(`DEBUG - Error in ${request.mode}Image:`, error);
       return {
         success: false,
         message: `Failed to ${request.mode} image`,
