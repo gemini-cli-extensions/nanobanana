@@ -30,18 +30,28 @@ export class FileHandler {
   }
 
   static findInputFile(filename: string): FileSearchResult {
-    if (path.isAbsolute(filename) && fs.existsSync(filename)) {
-      return {
-        found: true,
-        filePath: filename,
-        searchedPaths: [],
-      };
+    // Reject absolute paths — callers must provide a filename, not a full path
+    if (path.isAbsolute(filename)) {
+      return { found: false, searchedPaths: [] };
+    }
+
+    // Reject traversal sequences that could escape the search roots
+    const normalized = path.normalize(filename);
+    if (normalized.startsWith('..') || normalized.includes(path.sep + '..')) {
+      return { found: false, searchedPaths: [] };
     }
 
     const searchPaths = this.SEARCH_PATHS;
 
     for (const searchPath of searchPaths) {
-      const fullPath = path.join(searchPath, filename);
+      const resolvedRoot = path.resolve(searchPath);
+      const fullPath = path.resolve(searchPath, filename);
+
+      // Ensure the resolved path stays within the search root
+      if (!fullPath.startsWith(resolvedRoot + path.sep) && fullPath !== resolvedRoot) {
+        continue;
+      }
+
       if (fs.existsSync(fullPath)) {
         return {
           found: true,
@@ -94,8 +104,13 @@ export class FileHandler {
     filename: string,
   ): Promise<string> {
     const buffer = Buffer.from(base64Data, 'base64');
-    const fullPath = path.join(outputPath, filename);
 
+    const MAX_SIZE = 50 * 1024 * 1024; // 50 MB
+    if (buffer.length > MAX_SIZE) {
+      throw new Error('Image data exceeds the maximum allowed size of 50 MB');
+    }
+
+    const fullPath = path.join(outputPath, filename);
     await fs.promises.writeFile(fullPath, buffer);
     return fullPath;
   }
