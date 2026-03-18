@@ -50,6 +50,44 @@ class NanoBananaServer {
     }
   }
 
+  private validateToolArgs(toolName: string, args: Record<string, unknown> | undefined): void {
+    const prompt = args?.prompt;
+    if (typeof prompt !== 'string' || prompt.trim().length === 0) {
+      throw new Error('prompt must be a non-empty string');
+    }
+    if (prompt.length > 10000) {
+      throw new Error('prompt must not exceed 10000 characters');
+    }
+
+    if (toolName === 'generate_image') {
+      const outputCount = args?.outputCount;
+      if (outputCount !== undefined) {
+        if (typeof outputCount !== 'number' || !Number.isInteger(outputCount) || outputCount < 1 || outputCount > 8) {
+          throw new Error('outputCount must be an integer between 1 and 8');
+        }
+      }
+    }
+
+    if (toolName === 'generate_story') {
+      const steps = args?.steps;
+      if (steps !== undefined) {
+        if (typeof steps !== 'number' || !Number.isInteger(steps) || steps < 2 || steps > 8) {
+          throw new Error('steps must be an integer between 2 and 8');
+        }
+      }
+    }
+
+    if (toolName === 'edit_image' || toolName === 'restore_image') {
+      const file = args?.file;
+      if (typeof file !== 'string' || file.trim().length === 0) {
+        throw new Error('file must be a non-empty string');
+      }
+      if (file.length > 255) {
+        throw new Error('file path must not exceed 255 characters');
+      }
+    }
+  }
+
   private setupToolHandlers() {
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
       return {
@@ -408,6 +446,8 @@ class NanoBananaServer {
       const { name, arguments: args } = request.params;
 
       try {
+        this.validateToolArgs(name, args as Record<string, unknown> | undefined);
+
         let response;
 
         switch (name) {

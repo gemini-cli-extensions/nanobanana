@@ -12,47 +12,65 @@ import {
   AuthConfig,
   StorySequenceArgs,
 } from './types.js';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 export class ImageGenerator {
   private ai: GoogleGenAI;
   private modelName: string;
   private static readonly DEFAULT_MODEL = 'gemini-3.1-flash-image-preview';
+  private static readonly ALLOWED_MODELS = new Set([
+    'gemini-3.1-flash-image-preview',
+    'gemini-2.0-flash-preview-image-generation',
+    'imagen-3.0-generate-002',
+  ]);
 
   constructor(authConfig: AuthConfig) {
     this.ai = new GoogleGenAI({
       apiKey: authConfig.apiKey,
     });
-    this.modelName =
-      process.env.NANOBANANA_MODEL || ImageGenerator.DEFAULT_MODEL;
+    const requestedModel = process.env.NANOBANANA_MODEL;
+    if (requestedModel) {
+      if (ImageGenerator.ALLOWED_MODELS.has(requestedModel)) {
+        this.modelName = requestedModel;
+      } else {
+        console.error(`WARNING: Unknown NANOBANANA_MODEL value, using default`);
+        this.modelName = ImageGenerator.DEFAULT_MODEL;
+      }
+    } else {
+      this.modelName = ImageGenerator.DEFAULT_MODEL;
+    }
     console.error(`DEBUG - Using image model: ${this.modelName}`);
   }
 
   private async openImagePreview(filePath: string): Promise<void> {
     try {
       const platform = process.platform;
-      let command: string;
+      let program: string;
+      let args: string[];
 
       switch (platform) {
         case 'darwin': // macOS
-          command = `open "${filePath}"`;
+          program = 'open';
+          args = [filePath];
           break;
         case 'win32': // Windows
-          command = `start "" "${filePath}"`;
+          program = 'cmd';
+          args = ['/c', 'start', '', filePath];
           break;
         default: // Linux and others
-          command = `xdg-open "${filePath}"`;
+          program = 'xdg-open';
+          args = [filePath];
           break;
       }
 
-      await execAsync(command);
+      await execFileAsync(program, args);
       console.error(`DEBUG - Opened preview for: ${filePath}`);
     } catch (error: unknown) {
       console.error(
-        `DEBUG - Failed to open preview for ${filePath}:`,
+        `DEBUG - Failed to open preview`,
         error instanceof Error ? error.message : String(error),
       );
       // Don't throw - preview failure shouldn't break image generation
@@ -564,7 +582,7 @@ export class ImageGenerator {
         return {
           success: false,
           message: `Input image not found: ${request.inputImage}`,
-          error: `Searched in: ${fileResult.searchedPaths.join(', ')}`,
+          error: 'File not found. Ensure it is in the working directory, images/, input/, or nanobanana-output/ folder.',
         };
       }
 
