@@ -162,6 +162,54 @@ export class ImageGenerator {
       return false;
     }
 
+    // Magic-byte check: the base64 shape test passes for any long
+    // base64 string (logs, JSON, etc.), so verify the first few decoded
+    // bytes match a known image format before treating this as an image.
+    try {
+      const head = Buffer.from(data.substring(0, 32), 'base64');
+      const isPNG =
+        head.length >= 8 &&
+        head[0] === 0x89 &&
+        head[1] === 0x50 &&
+        head[2] === 0x4e &&
+        head[3] === 0x47 &&
+        head[4] === 0x0d &&
+        head[5] === 0x0a &&
+        head[6] === 0x1a &&
+        head[7] === 0x0a;
+      const isJPEG =
+        head.length >= 3 &&
+        head[0] === 0xff &&
+        head[1] === 0xd8 &&
+        head[2] === 0xff;
+      const isWebP =
+        head.length >= 12 &&
+        head[0] === 0x52 &&
+        head[1] === 0x49 &&
+        head[2] === 0x46 &&
+        head[3] === 0x46 &&
+        head[8] === 0x57 &&
+        head[9] === 0x45 &&
+        head[10] === 0x42 &&
+        head[11] === 0x50;
+      const isGIF =
+        head.length >= 6 &&
+        head[0] === 0x47 &&
+        head[1] === 0x49 &&
+        head[2] === 0x46 &&
+        head[3] === 0x38 &&
+        (head[4] === 0x37 || head[4] === 0x39) &&
+        head[5] === 0x61;
+      if (!(isPNG || isJPEG || isWebP || isGIF)) {
+        console.error(
+          'DEBUG - Data looks like base64 but magic bytes do not match PNG/JPEG/WebP/GIF',
+        );
+        return false;
+      }
+    } catch {
+      return false;
+    }
+
     return true;
   }
 
@@ -263,7 +311,9 @@ export class ImageGenerator {
         );
 
         try {
-          // Make API call for each variation
+          // Make API call for each variation. Forward `seed` when provided so
+          // reproducible variations actually reproduce — previously the seed
+          // was accepted in the MCP schema but dropped on the way to the SDK.
           const response = await this.ai.models.generateContent({
             model: this.modelName,
             contents: [
@@ -272,6 +322,9 @@ export class ImageGenerator {
                 parts: [{ text: currentPrompt }],
               },
             ],
+            ...(request.seed !== undefined
+              ? { config: { seed: request.seed } }
+              : {}),
           });
 
           console.error('DEBUG - API Response structure for variation', i + 1);
@@ -301,6 +354,7 @@ export class ImageGenerator {
                     : request.prompt,
                   request.fileFormat,
                   i,
+                  part.inlineData?.mimeType,
                 );
                 const fullPath = await FileHandler.saveImageFromBase64(
                   imageBase64,
@@ -458,6 +512,9 @@ export class ImageGenerator {
                   parts: [{ text: stepPrompt }],
                 },
               ],
+              ...(request.seed !== undefined
+                ? { config: { seed: request.seed } }
+                : {}),
             });
   
             if (response.candidates && response.candidates[0]?.content?.parts) {
@@ -475,6 +532,7 @@ export class ImageGenerator {
                     `${type}step${stepNumber}${request.prompt}`,
                     'png', // Stories default to png
                     0,
+                    part.inlineData?.mimeType,
                   );
                   const fullPath = await FileHandler.saveImageFromBase64(
                     imageBase64,
@@ -589,6 +647,9 @@ export class ImageGenerator {
             ],
           },
         ],
+        ...(request.seed !== undefined
+          ? { config: { seed: request.seed } }
+          : {}),
       });
 
       console.error(
@@ -621,6 +682,7 @@ export class ImageGenerator {
               `${request.mode}_${request.prompt}`,
               'png', // Edits default to png
               0,
+              part.inlineData?.mimeType,
             );
             const fullPath = await FileHandler.saveImageFromBase64(
               resultImageBase64,

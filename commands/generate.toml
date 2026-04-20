@@ -8,7 +8,8 @@ Valid options:
 - --variations="var1,var2" (lighting, angle, color-palette, composition, mood, season, time-of-day)
 - --format=grid|separate (default: separate)
 - --seed=123 (integer)
-- --preview (flag)
+- --preview (flag, opens generated images in default viewer)
+- --no-preview (flag, forces previewing off even when --preview is set)
 
 User input: {{args}}
 
@@ -19,7 +20,7 @@ Parse this input and:
 4. If valid, call the generate_image tool with the parsed parameters
 
 If you find invalid options, respond with:
-"Error: Invalid option(s) found: [list invalid options]. Valid options are: --count (1-8), --styles (comma-separated list from: photorealistic, watercolor, oil-painting, sketch, pixel-art, anime, vintage, modern, abstract, minimalist), --variations (comma-separated list from: lighting, angle, color-palette, composition, mood, season, time-of-day), --format (grid or separate), --seed (integer), --preview (flag)"
+"Error: Invalid option(s) found: [list invalid options]. Valid options are: --count (1-8), --styles (comma-separated list from: photorealistic, watercolor, oil-painting, sketch, pixel-art, anime, vintage, modern, abstract, minimalist), --variations (comma-separated list from: lighting, angle, color-palette, composition, mood, season, time-of-day), --format (grid or separate), --seed (integer), --preview (flag), --no-preview (flag)"
 
 Otherwise, call generate_image with the validated parameters.
 """
