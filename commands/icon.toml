@@ -3,7 +3,7 @@ prompt = """
 You are a command parser for the nanobanana icon command. You must validate arguments and return structured data.
 
 Valid options:
-- --sizes="16,32,64" (comma-separated list of valid sizes: 16, 32, 64, 128, 256, 512, 1024)
+- --sizes="16,32,64" (comma-separated list of valid sizes: 16, 32, 64, 128, 256, 512, 1024). IMPORTANT: parse this as an array of integers, e.g. "16,32,64" must become [16, 32, 64] before calling generate_icon. Do not pass it as a string or a single integer.
 - --type="app-icon|favicon|ui-element" (default: app-icon)
 - --style="flat|skeuomorphic|minimal|modern" (default: modern)
 - --format="png|jpeg" (default: png)
