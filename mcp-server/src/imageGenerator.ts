@@ -31,6 +31,15 @@ export class ImageGenerator {
     console.error(`DEBUG - Using image model: ${this.modelName}`);
   }
 
+  private resolveModel(request: ImageGenerationRequest): string {
+    if (request.model && request.model !== this.modelName) {
+      console.error(
+        `DEBUG - Overriding model for this call: ${request.model} (server default: ${this.modelName})`,
+      );
+    }
+    return request.model || this.modelName;
+  }
+
   private async openImagePreview(filePath: string): Promise<void> {
     try {
       const platform = process.platform;
@@ -265,7 +274,7 @@ export class ImageGenerator {
         try {
           // Make API call for each variation
           const response = await this.ai.models.generateContent({
-            model: this.modelName,
+            model: this.resolveModel(request),
             contents: [
               {
                 role: 'user',
@@ -451,7 +460,7 @@ export class ImageGenerator {
   
           try {
             const response = await this.ai.models.generateContent({
-              model: this.modelName,
+              model: this.resolveModel(request),
               contents: [
                 {
                   role: 'user',
@@ -574,7 +583,7 @@ export class ImageGenerator {
       );
 
       const response = await this.ai.models.generateContent({
-        model: this.modelName,
+        model: this.resolveModel(request),
         contents: [
           {
             role: 'user',

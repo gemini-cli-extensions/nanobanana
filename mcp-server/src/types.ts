@@ -9,6 +9,8 @@ export interface ImageGenerationRequest {
   inputImage?: string;
   outputCount?: number;
   mode: 'generate' | 'edit' | 'restore';
+  // Overrides the server default model for a single call (NANOBANANA_MODEL / DEFAULT_MODEL)
+  model?: string;
   // Batch generation options
   styles?: string[];
   variations?: string[];
