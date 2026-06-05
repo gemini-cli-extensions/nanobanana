@@ -103,6 +103,11 @@ class NanoBananaServer {
                     'Automatically open generated images in default viewer',
                   default: false,
                 },
+                model: {
+                  type: 'string',
+                  description:
+                    "Overrides the server's default model for this single call (optional)",
+                },
               },
               required: ['prompt'],
             },
@@ -126,6 +131,11 @@ class NanoBananaServer {
                   description:
                     'Automatically open generated images in default viewer',
                   default: false,
+                },
+                model: {
+                  type: 'string',
+                  description:
+                    "Overrides the server's default model for this single call (optional)",
                 },
               },
               required: ['prompt', 'file'],
@@ -151,6 +161,11 @@ class NanoBananaServer {
                   description:
                     'Automatically open generated images in default viewer',
                   default: false,
+                },
+                model: {
+                  type: 'string',
+                  description:
+                    "Overrides the server's default model for this single call (optional)",
                 },
               },
               required: ['prompt', 'file'],
@@ -210,6 +225,11 @@ class NanoBananaServer {
                     'Automatically open generated images in default viewer',
                   default: false,
                 },
+                model: {
+                  type: 'string',
+                  description:
+                    "Overrides the server's default model for this single call (optional)",
+                },
               },
               required: ['prompt'],
             },
@@ -266,6 +286,11 @@ class NanoBananaServer {
                   description:
                     'Automatically open generated images in default viewer',
                   default: false,
+                },
+                model: {
+                  type: 'string',
+                  description:
+                    "Overrides the server's default model for this single call (optional)",
                 },
               },
               required: ['prompt'],
@@ -325,6 +350,11 @@ class NanoBananaServer {
                   description:
                     'Automatically open generated images in default viewer',
                   default: false,
+                },
+                model: {
+                  type: 'string',
+                  description:
+                    "Overrides the server's default model for this single call (optional)",
                 },
               },
               required: ['prompt'],
@@ -392,6 +422,11 @@ class NanoBananaServer {
                     'Automatically open generated images in default viewer',
                   default: false,
                 },
+                model: {
+                  type: 'string',
+                  description:
+                    "Overrides the server's default model for this single call (optional)",
+                },
               },
               required: ['prompt'],
             },
@@ -424,6 +459,7 @@ class NanoBananaServer {
               noPreview:
                 (args?.noPreview as boolean) ||
                 (args?.['no-preview'] as boolean),
+              model: args?.model as string,
             };
             response =
               await this.imageGenerator.generateTextToImage(imageRequest);
@@ -439,6 +475,7 @@ class NanoBananaServer {
               noPreview:
                 (args?.noPreview as boolean) ||
                 (args?.['no-preview'] as boolean),
+              model: args?.model as string,
             };
             response = await this.imageGenerator.editImage(editRequest);
             break;
@@ -453,6 +490,7 @@ class NanoBananaServer {
               noPreview:
                 (args?.noPreview as boolean) ||
                 (args?.['no-preview'] as boolean),
+              model: args?.model as string,
             };
             response = await this.imageGenerator.editImage(restoreRequest);
             break;
@@ -468,6 +506,7 @@ class NanoBananaServer {
               noPreview:
                 (args?.noPreview as boolean) ||
                 (args?.['no-preview'] as boolean),
+              model: args?.model as string,
             };
             response =
               await this.imageGenerator.generateTextToImage(iconRequest);
@@ -483,6 +522,7 @@ class NanoBananaServer {
               noPreview:
                 (args?.noPreview as boolean) ||
                 (args?.['no-preview'] as boolean),
+              model: args?.model as string,
             };
             response =
               await this.imageGenerator.generateTextToImage(patternRequest);
@@ -499,6 +539,7 @@ class NanoBananaServer {
               noPreview:
                 (args?.noPreview as boolean) ||
                 (args?.['no-preview'] as boolean),
+              model: args?.model as string,
             };
             response = await this.imageGenerator.generateStorySequence(
               storyRequest,
@@ -516,6 +557,7 @@ class NanoBananaServer {
               noPreview:
                 (args?.noPreview as boolean) ||
                 (args?.['no-preview'] as boolean),
+              model: args?.model as string,
             };
             response =
               await this.imageGenerator.generateTextToImage(diagramRequest);
